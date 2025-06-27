@@ -189,4 +189,26 @@ window.exportarPdf = () => {
       if (dados.gatilhos) texto += `⚠️ Gatilhos: ${dados.gatilhos}\n`;
       if (dados.escapou) texto += `🛡️ Escapou: ${dados.escapou}\n`;
       if (dados.sentimento) texto += `💭 Sentimento: ${dados.sentimento}\n`;
-      if (
+      if (dados.nota) texto += `⭐ Nota: ${dados.nota}/10\n`;
+      texto += "\n";
+    }
+  }
+
+  for (let i = 1; i <= 4; i++) {
+    const chave = `noFap-feedback-${i}`;
+    const dados = JSON.parse(localStorage.getItem(chave));
+    if (dados?.texto) {
+      texto += `📦 Semana ${i}:\n${dados.texto}\n\n`;
+    }
+  }
+
+  const blob = new Blob([texto], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "historico-noFap.pdf";
+  link.click();
+
+  URL.revokeObjectURL(url);
+};
