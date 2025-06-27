@@ -5,40 +5,73 @@ window.onload = () => {
 };
 
 function switchTab(tabId) {
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach(tab => {
-    tab.classList.remove('active');
+  const tabs = document.querySelectorAll(".tab");
+  tabs.forEach((tab) => {
+    tab.classList.remove("active");
     tab.style.opacity = 0;
   });
 
   const next = document.getElementById(tabId);
   setTimeout(() => {
-    next.classList.add('active');
+    next.classList.add("active");
     next.style.opacity = 1;
   }, 100);
 }
 
+// ⏳ SALVAR/RESTAR os campos dos cartões
+function salvarCampo(tipo, indice, campo, valor) {
+  const chave = `noFap-${tipo}-${indice}`;
+  const dados = JSON.parse(localStorage.getItem(chave)) || {};
+  dados[campo] = valor;
+  localStorage.setItem(chave, JSON.stringify(dados));
+}
+
+function carregarCampo(tipo, indice, campo) {
+  const chave = `noFap-${tipo}-${indice}`;
+  const dados = JSON.parse(localStorage.getItem(chave)) || {};
+  return dados[campo] || "";
+}
+
 function renderDiario() {
   const diario = document.getElementById("diario");
-  diario.innerHTML = ""; // Limpar antes de renderizar
+  diario.innerHTML = "";
+
   for (let i = 1; i <= 30; i++) {
     diario.innerHTML += `
-      <div class="card">
+      <div class="card" data-index="${i}">
         <h3>Dia ${i}</h3>
-        <label>Data: <input type="date" /></label>
+        <label>Data: <input type="date" id="data-${i}" /></label>
         <label>Recaída:
-          <select>
+          <select id="recaida-${i}">
             <option value="">---</option>
             <option>Com pornografia</option>
             <option>Sem pornografia</option>
           </select>
         </label>
-        <label>Gatilhos: <textarea></textarea></label>
-        <label>O que fiz para escapar: <textarea></textarea></label>
-        <label>Como me senti: <textarea></textarea></label>
-        <label>Nota do dia (0–10): <input type="number" min="0" max="10" /></label>
+        <label>Gatilhos: <textarea id="gatilhos-${i}"></textarea></label>
+        <label>O que fiz para escapar: <textarea id="escapou-${i}"></textarea></label>
+        <label>Como me senti: <textarea id="sentimento-${i}"></textarea></label>
+        <label>Nota do dia (0–10): <input type="number" min="0" max="10" id="nota-${i}" /></label>
       </div>
     `;
+
+    // Preenche campos salvos
+    setTimeout(() => {
+      document.getElementById(`data-${i}`).value = carregarCampo("diario", i, "data");
+      document.getElementById(`recaida-${i}`).value = carregarCampo("diario", i, "recaida");
+      document.getElementById(`gatilhos-${i}`).value = carregarCampo("diario", i, "gatilhos");
+      document.getElementById(`escapou-${i}`).value = carregarCampo("diario", i, "escapou");
+      document.getElementById(`sentimento-${i}`).value = carregarCampo("diario", i, "sentimento");
+      document.getElementById(`nota-${i}`).value = carregarCampo("diario", i, "nota");
+
+      // Observadores para salvar ao digitar
+      document.getElementById(`data-${i}`).addEventListener("input", e => salvarCampo("diario", i, "data", e.target.value));
+      document.getElementById(`recaida-${i}`).addEventListener("input", e => salvarCampo("diario", i, "recaida", e.target.value));
+      document.getElementById(`gatilhos-${i}`).addEventListener("input", e => salvarCampo("diario", i, "gatilhos", e.target.value));
+      document.getElementById(`escapou-${i}`).addEventListener("input", e => salvarCampo("diario", i, "escapou", e.target.value));
+      document.getElementById(`sentimento-${i}`).addEventListener("input", e => salvarCampo("diario", i, "sentimento", e.target.value));
+      document.getElementById(`nota-${i}`).addEventListener("input", e => salvarCampo("diario", i, "nota", e.target.value));
+    }, 0);
   }
 }
 
@@ -69,13 +102,22 @@ window.reiniciarContador = () => {
 
 function renderFeedback() {
   const feedback = document.getElementById("feedback");
-  feedback.innerHTML = ""; // Limpar antes de renderizar
+  feedback.innerHTML = "";
+
   for (let i = 1; i <= 4; i++) {
+    const campoId = `feedback-${i}`;
     feedback.innerHTML += `
       <div class="card">
         <h3>Semana ${i}</h3>
-        <textarea placeholder="Como foi sua semana ${i}?"></textarea>
+        <textarea id="${campoId}" placeholder="Como foi sua semana ${i}?"></textarea>
       </div>
     `;
+
+    setTimeout(() => {
+      document.getElementById(campoId).value = carregarCampo("feedback", i, "texto");
+      document.getElementById(campoId).addEventListener("input", e => {
+        salvarCampo("feedback", i, "texto", e.target.value);
+      });
+    }, 0);
   }
 }
