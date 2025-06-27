@@ -86,6 +86,7 @@ function renderContador() {
       <button onclick="reiniciarContador()">Reiniciar contador</button>
       <button onclick="exportarBackup()">📤 Exportar Backup</button>
       <button onclick="importarBackup()">📥 Importar Backup</button>
+      <button onclick="exportarPdf()">📝 Exportar PDF</button>
     </div>
   `;
 }
@@ -167,3 +168,25 @@ window.importarBackup = () => {
   };
   input.click();
 };
+
+// 📝 Exportar histórico como PDF
+window.exportarPdf = () => {
+  let texto = "🚀 Histórico NoFap Tracker\n\n";
+
+  const contador = JSON.parse(localStorage.getItem("dias-limpos"));
+  if (contador) {
+    const dias = Math.floor((new Date() - new Date(contador.inicio)) / (1000 * 60 * 60 * 24));
+    texto += `🧼 Dias limpo: ${dias}\n\n`;
+  }
+
+  for (let i = 1; i <= 30; i++) {
+    const chave = `noFap-diario-${i}`;
+    const dados = JSON.parse(localStorage.getItem(chave));
+    if (dados) {
+      texto += `Dia ${i}:\n`;
+      if (dados.data) texto += `📅 Data: ${dados.data}\n`;
+      if (dados.recaida) texto += `🔁 Recaída: ${dados.recaida}\n`;
+      if (dados.gatilhos) texto += `⚠️ Gatilhos: ${dados.gatilhos}\n`;
+      if (dados.escapou) texto += `🛡️ Escapou: ${dados.escapou}\n`;
+      if (dados.sentimento) texto += `💭 Sentimento: ${dados.sentimento}\n`;
+      if (
