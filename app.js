@@ -1,4 +1,4 @@
-window.exportarPdf = async () => {
+window.exportarPdf = () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   let y = 20;
@@ -22,8 +22,7 @@ window.exportarPdf = async () => {
     const dados = JSON.parse(localStorage.getItem(`noFap-diario-${i}`));
     if (dados && y < 270) {
       doc.setFont("helvetica", "bold");
-      doc.text(`Dia ${i}`, 14, y);
-      y += 7;
+      doc.text(`Dia ${i}`, 14, y += 7);
       doc.setFont("helvetica", "normal");
 
       if (dados.data) doc.text(`📅 Data: ${dados.data}`, 14, y += 6);
