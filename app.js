@@ -18,7 +18,7 @@ function switchTab(tabId) {
   }, 100);
 }
 
-// ⏳ SALVAR/RESTAR os campos dos cartões
+// ⏳ SALVAR/RESTAURAR campos dos cartões
 function salvarCampo(tipo, indice, campo, valor) {
   const chave = `noFap-${tipo}-${indice}`;
   const dados = JSON.parse(localStorage.getItem(chave)) || {};
@@ -55,7 +55,6 @@ function renderDiario() {
       </div>
     `;
 
-    // Preenche campos salvos
     setTimeout(() => {
       document.getElementById(`data-${i}`).value = carregarCampo("diario", i, "data");
       document.getElementById(`recaida-${i}`).value = carregarCampo("diario", i, "recaida");
@@ -64,7 +63,6 @@ function renderDiario() {
       document.getElementById(`sentimento-${i}`).value = carregarCampo("diario", i, "sentimento");
       document.getElementById(`nota-${i}`).value = carregarCampo("diario", i, "nota");
 
-      // Observadores para salvar ao digitar
       document.getElementById(`data-${i}`).addEventListener("input", e => salvarCampo("diario", i, "data", e.target.value));
       document.getElementById(`recaida-${i}`).addEventListener("input", e => salvarCampo("diario", i, "recaida", e.target.value));
       document.getElementById(`gatilhos-${i}`).addEventListener("input", e => salvarCampo("diario", i, "gatilhos", e.target.value));
@@ -86,6 +84,8 @@ function renderContador() {
     <div class="card">
       <h2>🧼 Você está limpo há ${diasLimpos} ${plural}</h2>
       <button onclick="reiniciarContador()">Reiniciar contador</button>
+      <button onclick="exportarBackup()">📤 Exportar Backup</button>
+      <button onclick="importarBackup()">📥 Importar Backup</button>
     </div>
   `;
 }
@@ -122,7 +122,7 @@ function renderFeedback() {
   }
 }
 
-// Exportar dados como JSON
+// ☁️ Exportar dados como JSON
 window.exportarBackup = () => {
   const backup = {};
   Object.keys(localStorage).forEach(chave => {
@@ -141,7 +141,7 @@ window.exportarBackup = () => {
   URL.revokeObjectURL(url);
 };
 
-// Importar backup a partir de um arquivo
+// ☁️ Importar dados de backup
 window.importarBackup = () => {
   const input = document.createElement("input");
   input.type = "file";
@@ -160,7 +160,7 @@ window.importarBackup = () => {
         alert("Backup restaurado com sucesso! Recarregando página...");
         location.reload();
       } catch {
-        alert("Erro ao importar backup. Certifique-se de que o arquivo está correto.");
+        alert("Erro ao importar backup. Verifique se o arquivo é válido.");
       }
     };
     reader.readAsText(file);
