@@ -121,3 +121,49 @@ function renderFeedback() {
     }, 0);
   }
 }
+
+// Exportar dados como JSON
+window.exportarBackup = () => {
+  const backup = {};
+  Object.keys(localStorage).forEach(chave => {
+    if (chave.startsWith("noFap-") || chave === "dias-limpos") {
+      backup[chave] = localStorage.getItem(chave);
+    }
+  });
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "backup-noFap.json";
+  link.click();
+
+  URL.revokeObjectURL(url);
+};
+
+// Importar backup a partir de um arquivo
+window.importarBackup = () => {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        Object.keys(data).forEach(key => {
+          localStorage.setItem(key, data[key]);
+        });
+        alert("Backup restaurado com sucesso! Recarregando página...");
+        location.reload();
+      } catch {
+        alert("Erro ao importar backup. Certifique-se de que o arquivo está correto.");
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};

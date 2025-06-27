@@ -20,7 +20,12 @@
 
   <main>
     <section id="diario" class="tab active"></section>
-    <section id="contador" class="tab"></section>
+    <section id="contador" class="tab">
+  <div class="backup-buttons" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
+    <button onclick="exportarBackup()">📤 Exportar Backup</button>
+    <button onclick="importarBackup()">📥 Importar Backup</button>
+  </div>
+</section>
     <section id="feedback" class="tab"></section>
   </main>
 
