@@ -85,7 +85,6 @@ function renderContador() {
       <button onclick="reiniciarContador()">Reiniciar contador</button>
       <button onclick="exportarBackup()">📤 Exportar Backup</button>
       <button onclick="importarBackup()">📥 Importar Backup</button>
-      <button onclick="exportarPdf()">📝 Exportar PDF</button>
     </div>
   `;
 }
@@ -165,35 +164,3 @@ window.importarBackup = () => {
   };
   input.click();
 };
-
-window.exportarPdf = () => {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  let y = 20;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.text("🚀 Histórico NoFap Tracker", 105, y, { align: "center" });
-  y += 10;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-
-  const contador = JSON.parse(localStorage.getItem("dias-limpos"));
-  if (contador) {
-    const dias = Math.floor((new Date() - new Date(contador.inicio)) / (1000 * 60 * 60 * 24));
-    doc.text(`🧼 Dias limpo: ${dias}`, 14, y);
-    y += 10;
-  }
-
-  for (let i = 1; i <= 30; i++) {
-    const dados = JSON.parse(localStorage.getItem(`noFap-diario-${i}`));
-    if (dados && y < 270) {
-      doc.setFont("helvetica", "bold");
-      doc.text(`Dia ${i}`, 14, y += 7);
-      doc.setFont("helvetica", "normal");
-
-      if (dados.data) doc.text(`📅 Data: ${dados.data}`, 14, y += 6);
-      if (dados.recaida) doc.text(`🔁 Recaída: ${dados.recaida}`, 14, y += 6);
-      if (dados.gatilhos) doc.text(`⚠️ Gatilhos: ${dados.gatilhos}`, 14, y += 6);
-      if (dados.
