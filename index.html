@@ -9,8 +9,8 @@
 </head>
 <body>
   <header>
-  <h1>Você não está lutando só por você</h1>
-</header>
+    <h1>Você não está lutando só por você</h1>
+  </header>
 
   <nav>
     <button onclick="switchTab('diario')">Diário</button>
@@ -20,12 +20,10 @@
 
   <main>
     <section id="diario" class="tab active"></section>
-    <section id="contador" class="tab">
-  <div class="backup-buttons" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
-    <button onclick="exportarBackup()">📤 Exportar Backup</button>
-    <button onclick="importarBackup()">📥 Importar Backup</button>
-  </div>
-</section>
+
+    <!-- ABA CONTADOR (sem botões de backup no HTML, pois agora são criados via JS) -->
+    <section id="contador" class="tab"></section>
+
     <section id="feedback" class="tab"></section>
   </main>
 
