@@ -35,7 +35,7 @@ button {
   padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -50,10 +50,13 @@ main {
 
 .tab {
   display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .tab.active {
   display: block;
+  opacity: 1;
 }
 
 .card {
@@ -63,6 +66,18 @@ main {
   padding: 16px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 label {
@@ -72,14 +87,17 @@ label {
   font-size: 14px;
 }
 
-input[type="text"], input[type="date"], input[type="number"], textarea, select {
+input[type="date"],
+input[type="number"],
+select,
+textarea {
   width: 100%;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
   margin-top: 6px;
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   background-color: #fefefe;
   box-sizing: border-box;
 }
